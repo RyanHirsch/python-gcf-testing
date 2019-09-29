@@ -14,10 +14,22 @@ this_dir = os.path.dirname(os.path.abspath(__file__))
 for sub_dir in next(os.walk(this_dir))[1]:
     site.addsitedir(f"{this_dir}/{sub_dir}")
 
+ALL_HTTP_METHODS = [
+    "GET",
+    "HEAD",
+    "POST",
+    "PUT",
+    "DELETE",
+    "CONNECT",
+    "OPTIONS",
+    "TRACE",
+    "PATCH",
+]
+
 app = Flask(__name__)
 
 
-@app.route("/<folder>")
+@app.route("/<folder>", methods=ALL_HTTP_METHODS)
 def index(folder):
     return importlib.import_module(f"{folder}.main", folder).handler(request)
 
