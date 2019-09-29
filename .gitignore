@@ -1,3 +1,4 @@
+.temp-deployment/
 __pycache__/
 *.__pycache__
 

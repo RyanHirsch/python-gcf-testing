@@ -32,14 +32,21 @@ function deploy_python_cloud_function() {
   SOURCE_FOLDER=$1
   FUNCTION_NAME=$(basename "${SOURCE_FOLDER}")
 
+  TMP_DIR="${PROJECT_DIR}/.deployment"
+
   DEPLOY_NAME="${PROJECT_NAME}_${FUNCTION_NAME}"
 
-  cd "${SOURCE_FOLDER}"
+  rm -rf "${TMP_DIR}"
+  mkdir -p "${TMP_DIR}"
+
+  cp -r "${SOURCE_FOLDER}/" "${TMP_DIR}"
+  cp -r "${PROJECT_DIR}/shared/" "${TMP_DIR}"
 
   pipenv lock -r
 
   echo "Deploying ${DEPLOY_NAME}..."
   gcloud functions deploy "${DEPLOY_NAME}" \
+    --source="${TMP_DIR}" \
     --entry-point="handler" \
     --project="${GOOGLE_PROJECT_ID}" \
     --runtime=python37 \
